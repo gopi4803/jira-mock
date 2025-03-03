@@ -3,6 +3,7 @@ import hide from "../assets/hide.png";
 import visible from "../assets/visible.png";
 import google from "../assets/google.png";
 import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setEmail,
   setPassword,
@@ -11,8 +12,12 @@ import {
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { email, password, showPassword } = useSelector((state) => state.auth);
+  const handleLogin = () => {
+    navigate("/home");
+  };
 
   return (
     <div className="flex h-screen">
@@ -22,7 +27,8 @@ const LoginPage = () => {
       </div>
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-2 bg-gray-900">
         <form action="">
-          <div className="w-full flex flex-col space-y-4">
+          <div className="w-full flex flex-col space-y-4 gap-4">
+            <h2 className="font-bold text-gray-300">LOG IN</h2>
             {/* Username Field */}
             <div className="flex flex-col relative w-full">
               <label
@@ -67,12 +73,12 @@ const LoginPage = () => {
               {/* )
               } */}
             </div>
-            <a
-              href="#"
+            <Link
+              to="/forgot-password"
               className="text-gray-400 font-bold hover:text-gray-300 hover:scale-105 transition-all duration-200"
             >
               Forgot Password
-            </a>
+            </Link>
           </div>
         </form>
 
@@ -80,18 +86,19 @@ const LoginPage = () => {
         <div className="flex flex-col items-center">
           <button
             type="button"
-            className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4"
+            className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 cursor-pointer"
+            onClick={() => handleLogin()}
           >
             Login
           </button>
           <p className="text-gray-400 font-bold mt-4">
             Don't have an account?
-            <a
-              href=""
+            <Link
+              to="/sign-up"
               className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
             >
               SignUp here!
-            </a>
+            </Link>
           </p>
 
           <div className="w-full">

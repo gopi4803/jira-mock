@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import hide from "../assets/hide.png";
 import visible from "../assets/visible.png";
 import google from "../assets/google.png";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setUsername,
   setEmail,
@@ -15,6 +16,10 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const { username, email, password, confirmPassword, showPassword } =
     useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const handleSignup = () => {
+    navigate("/log-in");
+  };
 
   return (
     <div className="flex h-screen">
@@ -123,18 +128,19 @@ const SignupPage = () => {
           <button
             type="button"
             className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-6 cursor-pointer"
+            onClick={() => handleSignup()}
           >
             Signup
           </button>
           <div>
             <p className="text-gray-400 font-bold mt-4">
               Already have an account?
-              <a
-                href=""
+              <Link
+                to="/log-in"
                 className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
               >
                 LogIn here!
-              </a>
+              </Link>
             </p>
           </div>
           <div className="w-full">
