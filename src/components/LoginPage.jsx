@@ -11,7 +11,8 @@ import {
 } from "../redux/authSlice";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./schema/validationSchema";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -22,9 +23,10 @@ const LoginPage = () => {
       password: "",
     },
     mode: "onTouched",
+    resolver: yupResolver(validationSchema),
   });
   const { register, control, handleSubmit, setValue, formState } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
   const handleBlur = (field, value) => {
@@ -64,20 +66,11 @@ const LoginPage = () => {
                 // value={email}
                 defaultValue={email}
                 {...register("email", {
-                  required: {
-                    value: true,
-                    message: "Email is required",
-                  },
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: "Invalid email format",
-                  },
                   onBlur: (e) => handleBlur("email", e.target.value),
                 })}
-                // onChange={(e) => dispatch(setEmail(e.target.value))}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 w-full"
               />
-              <p className="text-red-500 text-sm">{errors.email?.message}</p>
+              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">{errors.email?.message}</p>
             </div>
 
             {/* Password Field */}
@@ -96,29 +89,20 @@ const LoginPage = () => {
                 // value={password}
                 defaultValue={password}
                 {...register("password", {
-                  required: {
-                    value: true,
-                    message: "Password is required",
-                  },
-                  minLength: {
-                    value: 8,
-                    message: "Password must be atleast 8 characters",
-                  },
                   onBlur: (e) => handleBlur("password", e.target.value),
                 })}
-                // onChange={(e) => dispatch(setPassword(e.target.value))}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full pr-10"
               />
-              {/* { password.length>0 && ( */}
               <img
                 src={showPassword.password ? visible : hide}
                 alt={showPassword.password ? "Hide Password" : "Show Password"}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 cursor-pointer hover:opacity-75 hover:scale-110 transition-all duration-200"
                 onClick={() => dispatch(togglePasswordVisibility("password"))}
               />
-              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full">{errors.password?.message}</p>
-              {/* )
-              } */}
+              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap">
+                {errors.password?.message}
+              </p>
+
             </div>
             <Link
               to="/forgot-password"
@@ -131,8 +115,10 @@ const LoginPage = () => {
           {/* Login and Sign Up Buttons */}
           <div className="flex flex-col items-center">
             <button
+              disabled={!isValid}
               type="submit"
-              className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 cursor-pointer"
+              className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 cursor-pointer 
+                ${isValid ? "bg-gray-300 text-gray-900" : "bg-gray-500 text-gray-700 cursor-not-allowed"}`}
             >
               Login
             </button>
