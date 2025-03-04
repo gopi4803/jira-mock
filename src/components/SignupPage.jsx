@@ -35,7 +35,7 @@ const SignupPage = () => {
             <div className="flex flex-col relative w-full">
               <label
                 htmlFor="username"
-                className="font-bold absolute left-2 -top-6"
+                className="font-bold absolute text-gray-300 left-2 -top-6"
               >
                 Username
               </label>
@@ -43,6 +43,7 @@ const SignupPage = () => {
                 type="text"
                 placeholder="Enter Username"
                 id="username"
+                name="username"
                 value={username}
                 onChange={(e) => dispatch(setUsername(e.target.value))}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
@@ -53,7 +54,7 @@ const SignupPage = () => {
             <div className="flex flex-col relative w-full">
               <label
                 htmlFor="email"
-                className="font-bold absolute left-2 -top-6"
+                className="font-bold absolute text-gray-300 left-2 -top-6"
               >
                 Email
               </label>
@@ -61,6 +62,7 @@ const SignupPage = () => {
                 type="email"
                 placeholder="Enter Email"
                 id="email"
+                name="email"
                 value={email}
                 onChange={(e) => dispatch(setEmail(e.target.value))}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
@@ -71,7 +73,7 @@ const SignupPage = () => {
             <div className="flex flex-col relative w-full">
               <label
                 htmlFor="password"
-                className="font-bold absolute left-2 -top-6"
+                className="font-bold absolute text-gray-300 left-2 -top-6"
               >
                 Password
               </label>
@@ -79,6 +81,7 @@ const SignupPage = () => {
                 type={showPassword.password ? "text" : "password"}
                 placeholder="Enter Password"
                 id="password"
+                name="password"
                 value={password}
                 onChange={(e) => {
                   dispatch(setPassword(e.target.value));
@@ -97,7 +100,7 @@ const SignupPage = () => {
             <div className="flex flex-col relative w-full">
               <label
                 htmlFor="confirmPassword"
-                className="font-bold absolute left-2 -top-6"
+                className="font-bold absolute text-gray-300 left-2 -top-6"
               >
                 Confirm Password
               </label>
@@ -105,6 +108,7 @@ const SignupPage = () => {
                 type={showPassword.confirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 id="confirmPassword"
+                name="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => {
                   dispatch(setConfirmPassword(e.target.value));
@@ -121,38 +125,38 @@ const SignupPage = () => {
               />
             </div>
           </div>
-        </form>
 
-        {/* Login and Sign Up Buttons */}
-        <div className="flex flex-col items-center">
-          <button
-            type="button"
-            className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-6 cursor-pointer"
-            onClick={() => handleSignup()}
-          >
-            Signup
-          </button>
-          <div>
-            <p className="text-gray-400 font-bold mt-4">
-              Already have an account?
-              <Link
-                to="/log-in"
-                className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
-              >
-                LogIn here!
-              </Link>
-            </p>
-          </div>
-          <div className="w-full">
+          {/* Login and Sign Up Buttons */}
+          <div className="flex flex-col items-center">
             <button
               type="button"
-              className="flex items-center justify-center bg-gray-300 text-gray-900 rounded-full px-6 py-3 w-full font-semibold shadow-md mt-6 space-x-3 cursor-pointer"
+              className="bg-gray-300 text-gray-900 rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-6 cursor-pointer"
+              onClick={() => handleSignup()}
             >
-              <img src={google} alt="Google Logo" className="w-5 h-5" />
-              <span>Sign up with Google</span>
+              Signup
             </button>
+            <div>
+              <p className="text-gray-400 font-bold mt-4">
+                Already have an account?
+                <Link
+                  to="/log-in"
+                  className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
+                >
+                  LogIn here!
+                </Link>
+              </p>
+            </div>
+            <div className="w-full">
+              <button
+                type="button"
+                className="flex items-center justify-center bg-gray-300 text-gray-900 rounded-full px-6 py-3 w-full font-semibold shadow-md mt-6 space-x-3 cursor-pointer"
+              >
+                <img src={google} alt="Google Logo" className="w-5 h-5" />
+                <span>Sign up with Google</span>
+              </button>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
