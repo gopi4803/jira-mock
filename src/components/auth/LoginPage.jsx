@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import hide from "../assets/hide.png";
-import visible from "../assets/visible.png";
-import google from "../assets/google.png";
+import hide from "../../assets/hide.png";
+import visible from "../../assets/visible.png";
+import google from "../../assets/google.png";
 import { useSelector, useDispatch } from "react-redux";
-import { data, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setEmail,
   setPassword,
   togglePasswordVisibility,
-} from "../redux/authSlice";
+} from "../../redux/authSlice";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchema } from "./schema/validationSchema";
+import { loginValidationSchema } from "../schema/validationSchema";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const LoginPage = () => {
       password: "",
     },
     mode: "onTouched",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(loginValidationSchema),
   });
   const { register, control, handleSubmit, setValue, formState } = form;
   const { errors, isValid } = formState;
@@ -59,10 +59,10 @@ const LoginPage = () => {
                 Email:
               </label>
               <input
-                type="text"
+                type="email"
                 id="email"
                 // name="email"
-                placeholder="Email"
+                placeholder="Enter Email"
                 // value={email}
                 defaultValue={email}
                 {...register("email", {
@@ -85,7 +85,7 @@ const LoginPage = () => {
                 type={showPassword.password ? "text" : "password"}
                 id="password"
                 // name="password"
-                placeholder="Password"
+                placeholder="Enter Password"
                 // value={password}
                 defaultValue={password}
                 {...register("password", {
@@ -117,8 +117,8 @@ const LoginPage = () => {
             <button
               disabled={!isValid}
               type="submit"
-              className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 cursor-pointer 
-                ${isValid ? "bg-gray-300 text-gray-900" : "bg-gray-500 text-gray-700 cursor-not-allowed"}`}
+              className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 
+                ${isValid ? "bg-gray-300 text-gray-900 cursor-pointer" : "bg-gray-500 text-gray-700 cursor-not-allowed"}`}
             >
               Login
             </button>

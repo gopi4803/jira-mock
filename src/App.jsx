@@ -1,12 +1,12 @@
 import './App.css'
-import LoginPage from './components/LoginPage'
+import LoginPage from './components/auth/LoginPage'
 import { Provider } from 'react-redux'
 import store from './redux/store'
-import SignupPage from './components/SignupPage'
+import SignupPage from './components/auth/SignupPage'
 import { Routes, Route } from 'react-router-dom'
-import HomePage from './components/HomePage'
-import IncorrectPage from './components/IncorrectPage'
-import ForgotPassword from './components/ForgotPassword'
+import HomePage from './components/home/HomePage'
+import IncorrectPage from './components/auth/IncorrectPage'
+import ForgotPassword from './components/auth/ForgotPassword'
 
 function App() {
 
