@@ -19,24 +19,6 @@ const SignupPage = () => {
   const { username, email, password, confirmPassword, showPassword } =
     useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const handleBlur = (field, value) => {
-    switch (field) {
-      case "username":
-        dispatch(setUsername(value));
-        break;
-      case "email":
-        dispatch(setEmail(value));
-        break;
-      case "password":
-        dispatch(setPassword(value));
-        break;
-      case "confirmPassword":
-        dispatch(setConfirmPassword(value));
-        break;
-      default:
-        break;
-    }
-  };
 
   return (
     <div className="flex h-screen">
@@ -64,7 +46,6 @@ const SignupPage = () => {
           {({
             isSubmitting,
             isValid,
-            handleBlur: formikHandleBlur,
             handleSubmit
           }) => (
             console.log("is Valid", isValid),
@@ -85,10 +66,6 @@ const SignupPage = () => {
                     id="username"
                     name="username"
                     className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
-                    onBlur={(e) => {
-                      formikHandleBlur(e);
-                      handleBlur("username", e.target.value);
-                    }}
                   />
                   <ErrorMessage
                     name="username"
@@ -111,10 +88,6 @@ const SignupPage = () => {
                     id="email"
                     name="email"
                     className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
-                    onBlur={(e) => {
-                      formikHandleBlur(e);
-                      handleBlur("email", e.target.value);
-                    }}
                   />
                   <ErrorMessage
                     name="email"
@@ -137,10 +110,6 @@ const SignupPage = () => {
                     id="password"
                     name="password"
                     className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
-                    onBlur={(e) => {
-                      formikHandleBlur(e);
-                      handleBlur("password", e.target.value);
-                    }}
                   />
                   <img
                     src={showPassword.password ? visible : hide}
@@ -171,10 +140,6 @@ const SignupPage = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full"
-                    onBlur={(e) => {
-                      formikHandleBlur(e);
-                      handleBlur("confirmPassword", e.target.value);
-                    }}
                   />
                   <img
                     src={showPassword.confirmPassword ? visible : hide}

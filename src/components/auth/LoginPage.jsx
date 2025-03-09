@@ -29,10 +29,6 @@ const LoginPage = () => {
   const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
-  const handleBlur = (field, value) => {
-    dispatch(field === "email" ? setEmail(value) : setPassword(value));
-  };
-
   const onSubmit = (data) => {
     dispatch(setEmail(data.email));
     dispatch(setPassword(data.password));
@@ -61,13 +57,9 @@ const LoginPage = () => {
               <input
                 type="email"
                 id="email"
-                // name="email"
                 placeholder="Enter Email"
-                // value={email}
                 defaultValue={email}
-                {...register("email", {
-                  onBlur: (e) => handleBlur("email", e.target.value),
-                })}
+                {...register("email")}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 w-full"
               />
               <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">{errors.email?.message}</p>
@@ -84,13 +76,9 @@ const LoginPage = () => {
               <input
                 type={showPassword.password ? "text" : "password"}
                 id="password"
-                // name="password"
                 placeholder="Enter Password"
-                // value={password}
                 defaultValue={password}
-                {...register("password", {
-                  onBlur: (e) => handleBlur("password", e.target.value),
-                })}
+                {...register("password")}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full pr-10"
               />
               <img
