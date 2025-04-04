@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import hide from "../../assets/hide.png";
 import visible from "../../assets/visible.png";
 import google from "../../assets/google.png";
@@ -25,7 +24,7 @@ const LoginPage = () => {
     mode: "onTouched",
     resolver: yupResolver(loginValidationSchema),
   });
-  const { register, control, handleSubmit, setValue, formState } = form;
+  const { register, control, handleSubmit, formState } = form;
   const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
@@ -62,7 +61,9 @@ const LoginPage = () => {
                 {...register("email")}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 w-full"
               />
-              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">{errors.email?.message}</p>
+              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">
+                {errors.email?.message}
+              </p>
             </div>
 
             {/* Password Field */}
@@ -90,7 +91,6 @@ const LoginPage = () => {
               <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap">
                 {errors.password?.message}
               </p>
-
             </div>
             <Link
               to="/forgot-password"
@@ -106,12 +106,16 @@ const LoginPage = () => {
               disabled={!isValid}
               type="submit"
               className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 
-                ${isValid ? "bg-gray-300 text-gray-900 cursor-pointer" : "bg-gray-500 text-gray-700 cursor-not-allowed"}`}
+                ${
+                  isValid
+                    ? "bg-gray-300 text-gray-900 cursor-pointer"
+                    : "bg-gray-500 text-gray-700 cursor-not-allowed"
+                }`}
             >
               Login
             </button>
             <p className="text-gray-400 font-bold mt-4">
-              Don't have an account?
+              Don&apos;t have an account?
               <Link
                 to="/sign-up"
                 className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
