@@ -40,3 +40,10 @@ export const signUpValidationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Password confirmation is required"),
 });
+
+
+export const forgotPasswordValidationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+});

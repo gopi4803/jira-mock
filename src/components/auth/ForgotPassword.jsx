@@ -1,33 +1,26 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginValidationSchema } from "../schema/validationSchema";
+import { forgotPasswordValidationSchema } from "../schema/validationSchema";
 import { useState } from "react";
 import EmailSentImage from "../../assets/EmailSent.jpg";
 
 const ForgotPassword = () => {
-  // const dispatch=useDispatch();
   const form = useForm({
     defaultValues: {
       email: "",
     },
     mode: "onTouched",
-    resolver: yupResolver(loginValidationSchema),
+    resolver: yupResolver(forgotPasswordValidationSchema),
   });
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
   const { email } = useSelector((state) => state.auth);
   const [submitted, setSubmitted] = useState(false);
 
-  const submit = (data) => {
-    // dispatch(setEmail(data.email));
-    // navigate("/home");
+  const onSubmit = (data) => {
     console.log(data);
-    console.log("submitting");
-    setSubmitted(true);
-  };
-  const handleClick = () => {
     console.log("submitting");
     setSubmitted(true);
   };
@@ -60,7 +53,8 @@ const ForgotPassword = () => {
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit(submit)}>
+          <div>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full flex flex-col space-y-4 gap-4">
               <h2 className="font-bold text-gray-300">FORGOT PASSWORD</h2>
 
@@ -99,13 +93,13 @@ const ForgotPassword = () => {
               </p>
               <button
                 type="submit"
-                onClick={handleClick}
                 className="flex items-center justify-center bg-gray-300 text-gray-900 rounded-full px-6 py-3 w-full font-semibold shadow-md mt-6 space-x-3 cursor-pointer"
               >
                 <span>Reset Password</span>
               </button>
             </div>
           </form>
+          </div>
         )}
       </div>
     </div>
