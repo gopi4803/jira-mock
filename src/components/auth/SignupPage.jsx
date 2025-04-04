@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import hide from "../../assets/hide.png";
 import visible from "../../assets/visible.png";
 import google from "../../assets/google.png";
@@ -13,6 +12,7 @@ import {
 } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpValidationSchema } from "../schema/validationSchema";
+import axios from "axios";
 
 const SignupPage = () => {
   const dispatch = useDispatch();
@@ -20,6 +20,23 @@ const SignupPage = () => {
     useSelector((state) => state.auth);
   const navigate = useNavigate();
 
+  const handleSignup = async (values, { setSubmitting, setErrors }) => {
+    try {
+      const response = await axios.post("http://localhost:8080/users/signup", values);
+      console.log("User registered successfully:", response.data);
+      console.log("User registered successfully:");
+      dispatch(setUsername(values.username));
+      dispatch(setEmail(values.email));
+      dispatch(setPassword(values.password));
+      dispatch(setConfirmPassword(values.confirmPassword));
+      navigate("/log-in");
+    } catch (error) {
+      console.error("Signup failed:", error.response?.data || error.message);
+      setErrors({ email: "Email is already taken." });
+    }
+    setSubmitting(false);
+  };
+  
   return (
     <div className="flex h-screen">
       <div className="flex-1 flex flex-col items-center justify-center bg-white">
@@ -31,17 +48,7 @@ const SignupPage = () => {
           initialValues={{ username, email, password, confirmPassword }}
           validationSchema={signUpValidationSchema}
           validateOnMount={true} 
-          onSubmit={(values, { setSubmitting }) => {
-            console.log("Form submitted with values:", values);
-            dispatch(setUsername(values.username));
-            dispatch(setEmail(values.email));
-            dispatch(setPassword(values.password));
-            dispatch(setConfirmPassword(values.confirmPassword));
-            setTimeout(() => {
-              setSubmitting(false);
-              navigate("/log-in");
-            }, 500); 
-          }}
+          onSubmit={handleSignup}
         >
           {({
             isSubmitting,
