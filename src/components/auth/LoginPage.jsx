@@ -7,6 +7,7 @@ import {
   setEmail,
   setPassword,
   togglePasswordVisibility,
+  setToken,
 } from "../../redux/authSlice";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
@@ -29,20 +30,23 @@ const LoginPage = () => {
   const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
-
   const onSubmit = async (data) => {
     try {
       const response = await axios.post("http://localhost:8080/users/login", {
         email: data.email,
         password: data.password,
       });
-
       const token = response.data;
-      localStorage.setItem("token", token);
-
-      dispatch(setEmail(data.email));
-      dispatch(setPassword(data.password));
-      navigate("/home");
+      console.log("TOKEN is ", token);
+      if (token) {
+        localStorage.setItem("token", token);
+        dispatch(setEmail(data.email));
+        dispatch(setPassword(data.password));
+        dispatch(setToken(token));
+        navigate("/home");
+      } else {
+        throw new Error("Token not found in response");
+      }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
       alert("Invalid email or password");
