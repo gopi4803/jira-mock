@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../schema/validationSchema";
+import axios from "axios";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -28,10 +29,24 @@ const LoginPage = () => {
   const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
-  const onSubmit = (data) => {
-    dispatch(setEmail(data.email));
-    dispatch(setPassword(data.password));
-    navigate("/home");
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:8080/users/login", {
+        email: data.email,
+        password: data.password,
+      });
+
+      const token = response.data;
+      localStorage.setItem("token", token);
+
+      dispatch(setEmail(data.email));
+      dispatch(setPassword(data.password));
+      navigate("/home");
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
+      alert("Invalid email or password");
+    }
   };
 
   return (
