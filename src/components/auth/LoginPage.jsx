@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import hide from "../assets/hide.png";
-import visible from "../assets/visible.png";
-import google from "../assets/google.png";
+import hide from "../../assets/hide.png";
+import visible from "../../assets/visible.png";
+import google from "../../assets/google.png";
 import { useSelector, useDispatch } from "react-redux";
-import { data, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setEmail,
   setPassword,
   togglePasswordVisibility,
-} from "../redux/authSlice";
+  setToken,
+} from "../../redux/authSlice";
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchema } from "./schema/validationSchema";
+import { loginValidationSchema } from "../schema/validationSchema";
+import axios from "axios";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -23,20 +24,33 @@ const LoginPage = () => {
       password: "",
     },
     mode: "onTouched",
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(loginValidationSchema),
   });
-  const { register, control, handleSubmit, setValue, formState } = form;
+  const { register, control, handleSubmit, formState } = form;
   const { errors, isValid } = formState;
   const { email, password, showPassword } = useSelector((state) => state.auth);
 
-  const handleBlur = (field, value) => {
-    dispatch(field === "email" ? setEmail(value) : setPassword(value));
-  };
-
-  const onSubmit = (data) => {
-    dispatch(setEmail(data.email));
-    dispatch(setPassword(data.password));
-    navigate("/home");
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("http://localhost:8080/users/login", {
+        email: data.email,
+        password: data.password,
+      });
+      const token = response.data;
+      console.log("TOKEN is ", token);
+      if (token) {
+        localStorage.setItem("token", token);
+        dispatch(setEmail(data.email));
+        dispatch(setPassword(data.password));
+        dispatch(setToken(token));
+        navigate("/home");
+      } else {
+        throw new Error("Token not found in response");
+      }
+    } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
+      alert("Invalid email or password");
+    }
   };
 
   return (
@@ -59,18 +73,16 @@ const LoginPage = () => {
                 Email:
               </label>
               <input
-                type="text"
+                type="email"
                 id="email"
-                // name="email"
-                placeholder="Email"
-                // value={email}
+                placeholder="Enter Email"
                 defaultValue={email}
-                {...register("email", {
-                  onBlur: (e) => handleBlur("email", e.target.value),
-                })}
+                {...register("email")}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 w-full"
               />
-              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">{errors.email?.message}</p>
+              <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap overflow-hidden text-ellipsis">
+                {errors.email?.message}
+              </p>
             </div>
 
             {/* Password Field */}
@@ -84,13 +96,9 @@ const LoginPage = () => {
               <input
                 type={showPassword.password ? "text" : "password"}
                 id="password"
-                // name="password"
-                placeholder="Password"
-                // value={password}
+                placeholder="Enter Password"
                 defaultValue={password}
-                {...register("password", {
-                  onBlur: (e) => handleBlur("password", e.target.value),
-                })}
+                {...register("password")}
                 className="bg-gray-300 rounded-lg placeholder-gray-900 text-center py-2 px-2 w-full pr-10"
               />
               <img
@@ -102,7 +110,6 @@ const LoginPage = () => {
               <p className="text-red-500 text-sm mt-1 absolute left-1/2 -translate-x-1/2 -bottom-5 text-center w-full min-h-[20px] whitespace-nowrap">
                 {errors.password?.message}
               </p>
-
             </div>
             <Link
               to="/forgot-password"
@@ -117,13 +124,17 @@ const LoginPage = () => {
             <button
               disabled={!isValid}
               type="submit"
-              className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 cursor-pointer 
-                ${isValid ? "bg-gray-300 text-gray-900" : "bg-gray-500 text-gray-700 cursor-not-allowed"}`}
+              className={`rounded-full px-6 py-2 w-40 font-semibold shadow-md mt-4 
+                ${
+                  isValid
+                    ? "bg-gray-300 text-gray-900 cursor-pointer"
+                    : "bg-gray-500 text-gray-700 cursor-not-allowed"
+                }`}
             >
               Login
             </button>
             <p className="text-gray-400 font-bold mt-4">
-              Don't have an account?
+              Don&apos;t have an account?
               <Link
                 to="/sign-up"
                 className="font-bold text-gray-300 ml-1 cursor-pointer hover:scale-110 transition-all duration-200 inline-block"
